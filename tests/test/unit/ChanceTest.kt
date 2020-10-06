@@ -13,20 +13,33 @@ import probability.Chance
 
 // Ensures Chance operates correctly
 internal class ChanceTest {
+    private val certain = Chance(1)
+    private val likely = Chance(0.75)
+    private val equallyLikely = Chance(0.5)
+    private val unlikely = Chance(0.25)
+    private val impossible = Chance(0)
 
     @Test internal fun equals() {
-        assertEquals(Chance(0.75), Chance(0.75))
-        assertNotEquals(Chance(0.75), Chance(0.25))
-        assertNotEquals(Chance(0.75), Any())
-        assertNotEquals(Chance(0.75), null)
+        assertEquals(Chance(0.75), likely)
+        assertNotEquals(likely, Chance(0.25))
+        assertNotEquals(likely, Any())
+        assertNotEquals(likely, null)
     }
 
     @Test fun `Chance in hash set`() {
-        assert(hashSetOf(Chance(0.75)).contains(Chance(0.75)))
-        assertEquals(1, hashSetOf(Chance(0.75), Chance(0.75)).size)
+        assert(hashSetOf(likely).contains(Chance(0.75)))
+        assertEquals(1, hashSetOf(likely, Chance(0.75)).size)
     }
 
     @Test fun hash() {
-        assertEquals(Chance(0.75).hashCode(), Chance(0.75).hashCode())
+        assertEquals(likely.hashCode(), Chance(0.75).hashCode())
+    }
+
+    @Test fun not() {
+        assertEquals(unlikely, likely.not())
+        assertEquals(likely, likely.not().not())
+        assertEquals(likely, !!likely)
+        assertEquals(impossible, certain.not())
+        assertEquals(equallyLikely, equallyLikely.not())
     }
 }

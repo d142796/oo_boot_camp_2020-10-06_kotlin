@@ -12,9 +12,19 @@ import kotlin.math.absoluteValue
 class Chance(likelihoodAsFraction: Number) {
     private val fraction = likelihoodAsFraction.toDouble()
 
+    init {
+        require(fraction in 0.0..1.0) { "Likelihood must be a fraction between 0.0 and 1.0, inclusive"}
+    }
+
+    companion object {
+        private const val CERTAIN_FRACTION = 1.0
+    }
+
     override fun equals(other: Any?) = other is Chance && this.equals(other)
 
     private fun equals(other: Chance) = this.fraction == other.fraction
 
     override fun hashCode() = fraction.hashCode()
+
+    operator fun not() = Chance(CERTAIN_FRACTION - fraction)
 }
