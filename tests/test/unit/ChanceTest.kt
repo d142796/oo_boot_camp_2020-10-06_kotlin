@@ -33,12 +33,14 @@ internal class ChanceTest {
 
     @Test fun hash() {
         assertEquals(likely.hashCode(), Chance(0.75).hashCode())
+        assertEquals(Chance(0.3).hashCode(), (!!Chance(0.3)).hashCode())
     }
 
     @Test fun not() {
         assertEquals(unlikely, likely.not())
         assertEquals(likely, likely.not().not())
         assertEquals(likely, !!likely)
+        assertEquals(Chance(0.3), !!Chance(0.3))
         assertEquals(impossible, certain.not())
         assertEquals(equallyLikely, equallyLikely.not())
     }

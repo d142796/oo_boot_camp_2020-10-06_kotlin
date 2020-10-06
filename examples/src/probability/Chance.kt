@@ -18,13 +18,14 @@ class Chance(likelihoodAsFraction: Number) {
 
     companion object {
         private const val CERTAIN_FRACTION = 1.0
+        private const val DELTA = 0.000000001
     }
 
     override fun equals(other: Any?) = other is Chance && this.equals(other)
 
-    private fun equals(other: Chance) = this.fraction == other.fraction
+    private fun equals(other: Chance) = (this.fraction - other.fraction).absoluteValue < DELTA
 
-    override fun hashCode() = fraction.hashCode()
+    override fun hashCode() = (fraction / DELTA).toLong().hashCode()
 
     operator fun not() = Chance(CERTAIN_FRACTION - fraction)
 
