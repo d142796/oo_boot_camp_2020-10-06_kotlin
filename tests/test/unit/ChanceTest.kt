@@ -6,7 +6,8 @@
 
 package unit
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import probability.Chance
@@ -46,10 +47,23 @@ internal class ChanceTest {
     }
 
     @Test fun and() {
-        assertEquals(unlikely, equallyLikely.and(equallyLikely))
-        assertEquals(Chance(0.1875), likely.and(unlikely))
-        assertEquals(likely.and(unlikely), unlikely.and(likely))
-        assertEquals(impossible, likely.and(impossible))
-        assertEquals(likely, certain.and(likely))
+        assertEquals(unlikely, equallyLikely and equallyLikely)
+        assertEquals(Chance(0.1875), likely and unlikely)
+        assertEquals(likely and unlikely, unlikely and likely)
+        assertEquals(impossible, likely and impossible)
+        assertEquals(likely, certain and likely)
+    }
+
+    @Test internal fun or() {
+        assertEquals(likely, equallyLikely or equallyLikely)
+        assertEquals(Chance(0.8125), likely or unlikely)
+        assertEquals(likely or unlikely, unlikely or likely)
+        assertEquals(likely, likely or impossible)
+        assertEquals(certain, certain or likely)
+    }
+
+    @Test internal fun `invalid fractions`() {
+        assertThrows<java.lang.IllegalArgumentException> { Chance(-0.01) }
+        assertThrows<java.lang.IllegalArgumentException> { Chance(1.01) }
     }
 }
