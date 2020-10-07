@@ -63,7 +63,7 @@ internal class ChanceTest {
     }
 
     @Test internal fun `invalid fractions`() {
-        assertThrows<java.lang.IllegalArgumentException> { Chance(-0.01) }
-        assertThrows<java.lang.IllegalArgumentException> { Chance(1.01) }
+        assertThrows<IllegalArgumentException> { Chance(-0.01) }
+        assertThrows<IllegalArgumentException> { Chance(1.01) }
     }
 }
