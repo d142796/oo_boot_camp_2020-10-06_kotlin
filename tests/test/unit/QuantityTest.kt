@@ -10,16 +10,22 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import quantity.Quantity
+import quantity.Unit.Companion.celsius
 import quantity.Unit.Companion.chains
 import quantity.Unit.Companion.cups
+import quantity.Unit.Companion.fahrenheit
 import quantity.Unit.Companion.feet
 import quantity.Unit.Companion.furlongs
 import quantity.Unit.Companion.gallons
+import quantity.Unit.Companion.gasMark
 import quantity.Unit.Companion.inches
+import quantity.Unit.Companion.kelvin
 import quantity.Unit.Companion.miles
 import quantity.Unit.Companion.ounces
 import quantity.Unit.Companion.pints
 import quantity.Unit.Companion.quarts
+import quantity.Unit.Companion.rankine
 import quantity.Unit.Companion.tablespoons
 import quantity.Unit.Companion.teaspoons
 import quantity.Unit.Companion.yards
@@ -51,6 +57,7 @@ internal class QuantityTest {
         assertEquals(8.tablespoons.hashCode(), 8.tablespoons.hashCode())
         assertEquals(8.tablespoons.hashCode(), 0.5.cups.hashCode())
         assertEquals(18.inches.hashCode(), 0.5.yards.hashCode())
+        assertEquals(50.fahrenheit.hashCode(), 10.celsius.hashCode())
     }
 
     @Test fun arithmetic() {
@@ -68,5 +75,21 @@ internal class QuantityTest {
 
     @Test fun `incompatible units`() {
         assertThrows<IllegalArgumentException> { 3.yards - 4.tablespoons}
+    }
+
+    @Test internal fun temperatures() {
+        assertBidirectionalEquality(0.celsius, 32.fahrenheit)
+        assertBidirectionalEquality(10.celsius, 50.fahrenheit)
+        assertBidirectionalEquality(100.celsius, 212.fahrenheit)
+        assertBidirectionalEquality((-40).celsius, (-40).fahrenheit)
+        assertBidirectionalEquality(325.fahrenheit, 3.gasMark)
+        assertBidirectionalEquality(0.celsius, 273.15.kelvin)
+        assertBidirectionalEquality(50.fahrenheit, 283.15.kelvin)
+        assertBidirectionalEquality(50.fahrenheit, 509.67.rankine)
+    }
+
+    private fun assertBidirectionalEquality(left: Quantity, right: Quantity) {
+        assertEquals(left, right)
+        assertEquals(right, left)
     }
 }

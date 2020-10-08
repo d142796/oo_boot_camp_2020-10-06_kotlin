@@ -10,6 +10,7 @@ package quantity
 class Unit {
     private val baseUnit: Unit
     private val baseUnitRatio: Double
+    private val offset: Double
 
     companion object {
         private val teaspoon = Unit()
@@ -27,6 +28,12 @@ class Unit {
         private val furlong = Unit(10, chain)
         private val mile = Unit(8, furlong)
 
+        internal val celsius = Unit()
+        internal val fahrenheit = Unit(5/9.0, 32, celsius)
+        internal val gasMark = Unit(125/9.0, -218.0/25, celsius)
+        internal val kelvin = Unit(1, 273.15, celsius)
+        internal val rankine = Unit(5/9.0, 491.67, celsius)
+
         val Number.teaspoons get() = Quantity(this, teaspoon)
         val Number.tablespoons get() = Quantity(this, tablespoon)
         val Number.ounces get() = Quantity(this, ounce)
@@ -41,26 +48,36 @@ class Unit {
         val Number.chains get() = Quantity(this, chain)
         val Number.furlongs get() = Quantity(this, furlong)
         val Number.miles get() = Quantity(this, mile)
+
+        val Number.celsius get() = Quantity(this, Unit.celsius)
+        val Number.fahrenheit get() = Quantity(this, Unit.fahrenheit)
+        val Number.gasMark get() = Quantity(this, Unit.gasMark)
+        val Number.kelvin get() = Quantity(this, Unit.kelvin)
+        val Number.rankine get() = Quantity(this, Unit.rankine)
     }
 
     private constructor() {
         baseUnit = this
         baseUnitRatio = 1.0
+        offset = 0.0
     }
 
-    private constructor(relativeRatio: Number, relativeUnit: Unit) {
+    private constructor(relativeRatio: Number, relativeUnit: Unit) :
+            this(relativeRatio, 0.0, relativeUnit)
+
+    private constructor(relativeRatio: Number, offset: Number, relativeUnit: Unit) {
         baseUnit = relativeUnit.baseUnit
         baseUnitRatio = relativeRatio.toDouble() * relativeUnit.baseUnitRatio
+        this.offset = offset.toDouble()
     }
 
     internal fun convertedAmount(otherAmount: Double, otherUnit: Unit) =
-        (otherAmount * otherUnit.baseUnitRatio / this.baseUnitRatio).also {
+        ((otherAmount - otherUnit.offset) * otherUnit.baseUnitRatio / this.baseUnitRatio + this.offset).also {
             require(this.isCompatible(otherUnit)) { "Incompatible unit types" }
         }
 
     internal fun hashCode(amount: Double) =
-        (amount * baseUnitRatio / Quantity.DELTA).toLong().hashCode()
+        ((amount - offset) * baseUnitRatio / Quantity.DELTA).toLong().hashCode()
 
     internal fun isCompatible(other: Unit) = this.baseUnit == other.baseUnit
-
 }
