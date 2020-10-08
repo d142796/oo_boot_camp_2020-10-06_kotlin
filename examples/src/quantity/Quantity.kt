@@ -18,7 +18,11 @@ open class Quantity internal constructor(amount: Number, private val unit: Unit)
 
     override fun equals(other: Any?) = other is Quantity && this.equals(other)
 
-    private fun equals(other: Quantity) = (this.amount - convertedAmount(other)).absoluteValue < DELTA
+    private fun equals(other: Quantity) =
+        this.isCompatible(other) &&
+                (this.amount - convertedAmount(other)).absoluteValue < DELTA
+
+    private fun isCompatible(other: Quantity) = this.unit.isCompatible(other.unit)
 
     override fun hashCode() = unit.hashCode(amount)
 

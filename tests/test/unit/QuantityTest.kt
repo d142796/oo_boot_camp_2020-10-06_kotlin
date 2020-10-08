@@ -9,6 +9,7 @@ package unit
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import quantity.Unit.Companion.chains
 import quantity.Unit.Companion.cups
 import quantity.Unit.Companion.feet
@@ -58,5 +59,14 @@ internal class QuantityTest {
         assertEquals((-0.5).pints, 10.tablespoons - 13.ounces)
         assertEquals(-4.feet, 24.inches - 2.yards)
         assertEquals(8.chains, 1.furlongs - 44.yards)
+    }
+
+    @Test fun `cross metric types`() {
+        assertNotEquals(1.inches, 1.teaspoons)
+        assertNotEquals(4.ounces, 2.feet)
+    }
+
+    @Test fun `incompatible units`() {
+        assertThrows<IllegalArgumentException> { 3.yards - 4.tablespoons}
     }
 }

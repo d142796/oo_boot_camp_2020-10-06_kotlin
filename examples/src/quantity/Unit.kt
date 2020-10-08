@@ -8,6 +8,7 @@ package quantity
 
 // Understands a specific metric
 class Unit {
+    private val baseUnit: Unit
     private val baseUnitRatio: Double
 
     companion object {
@@ -43,15 +44,23 @@ class Unit {
     }
 
     private constructor() {
+        baseUnit = this
         baseUnitRatio = 1.0
     }
 
     private constructor(relativeRatio: Number, relativeUnit: Unit) {
+        baseUnit = relativeUnit.baseUnit
         baseUnitRatio = relativeRatio.toDouble() * relativeUnit.baseUnitRatio
     }
 
     internal fun convertedAmount(otherAmount: Double, otherUnit: Unit) =
-        otherAmount * otherUnit.baseUnitRatio / this.baseUnitRatio
+        (otherAmount * otherUnit.baseUnitRatio / this.baseUnitRatio).also {
+            require(this.isCompatible(otherUnit)) { "Incompatible unit types" }
+        }
 
-    internal fun hashCode(amount: Double) = (amount * baseUnitRatio / Quantity.DELTA).toLong().hashCode()
+    internal fun hashCode(amount: Double) =
+        (amount * baseUnitRatio / Quantity.DELTA).toLong().hashCode()
+
+    internal fun isCompatible(other: Unit) = this.baseUnit == other.baseUnit
+
 }
