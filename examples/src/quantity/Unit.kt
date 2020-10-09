@@ -28,32 +28,32 @@ class Unit {
         private val furlong = Unit(10, chain)
         private val mile = Unit(8, furlong)
 
-        internal val celsius = Unit()
-        internal val fahrenheit = Unit(5/9.0, 32, celsius)
-        internal val gasMark = Unit(125/9.0, -218.0/25, celsius)
-        internal val kelvin = Unit(1, 273.15, celsius)
-        internal val rankine = Unit(5/9.0, 491.67, celsius)
+        private val celsius = Unit()
+        private val fahrenheit = Unit(5/9.0, 32, celsius)
+        private val gasMark = Unit(125/9.0, -218.0/25, celsius)
+        private val kelvin = Unit(1, 273.15, celsius)
+        private val rankine = Unit(5/9.0, 491.67, celsius)
 
-        val Number.teaspoons get() = Quantity(this, teaspoon)
-        val Number.tablespoons get() = Quantity(this, tablespoon)
-        val Number.ounces get() = Quantity(this, ounce)
-        val Number.cups get() = Quantity(this, cup)
-        val Number.pints get() = Quantity(this, pint)
-        val Number.quarts get() = Quantity(this, quart)
-        val Number.gallons get() = Quantity(this, gallon)
+        val Number.teaspoons get() = RatioQuantity(this, teaspoon)
+        val Number.tablespoons get() = RatioQuantity(this, tablespoon)
+        val Number.ounces get() = RatioQuantity(this, ounce)
+        val Number.cups get() = RatioQuantity(this, cup)
+        val Number.pints get() = RatioQuantity(this, pint)
+        val Number.quarts get() = RatioQuantity(this, quart)
+        val Number.gallons get() = RatioQuantity(this, gallon)
 
-        val Number.inches get() = Quantity(this, inch)
-        val Number.feet get() = Quantity(this, foot)
-        val Number.yards get() = Quantity(this, yard)
-        val Number.chains get() = Quantity(this, chain)
-        val Number.furlongs get() = Quantity(this, furlong)
-        val Number.miles get() = Quantity(this, mile)
+        val Number.inches get() = RatioQuantity(this, inch)
+        val Number.feet get() = RatioQuantity(this, foot)
+        val Number.yards get() = RatioQuantity(this, yard)
+        val Number.chains get() = RatioQuantity(this, chain)
+        val Number.furlongs get() = RatioQuantity(this, furlong)
+        val Number.miles get() = RatioQuantity(this, mile)
 
-        val Number.celsius get() = Quantity(this, Unit.celsius)
-        val Number.fahrenheit get() = Quantity(this, Unit.fahrenheit)
-        val Number.gasMark get() = Quantity(this, Unit.gasMark)
-        val Number.kelvin get() = Quantity(this, Unit.kelvin)
-        val Number.rankine get() = Quantity(this, Unit.rankine)
+        val Number.celsius get() = IntervalQuantity(this, Unit.celsius)
+        val Number.fahrenheit get() = IntervalQuantity(this, Unit.fahrenheit)
+        val Number.gasMark get() = IntervalQuantity(this, Unit.gasMark)
+        val Number.kelvin get() = IntervalQuantity(this, Unit.kelvin)
+        val Number.rankine get() = IntervalQuantity(this, Unit.rankine)
     }
 
     private constructor() {
@@ -77,7 +77,7 @@ class Unit {
         }
 
     internal fun hashCode(amount: Double) =
-        ((amount - offset) * baseUnitRatio / Quantity.DELTA).toLong().hashCode()
+        ((amount - offset) * baseUnitRatio / RatioQuantity.DELTA).toLong().hashCode()
 
     internal fun isCompatible(other: Unit) = this.baseUnit == other.baseUnit
 }

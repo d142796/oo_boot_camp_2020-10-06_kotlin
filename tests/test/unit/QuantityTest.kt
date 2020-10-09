@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import quantity.Quantity
+import quantity.IntervalQuantity
 import quantity.Unit.Companion.celsius
 import quantity.Unit.Companion.chains
 import quantity.Unit.Companion.cups
@@ -88,7 +88,13 @@ internal class QuantityTest {
         assertBidirectionalEquality(50.fahrenheit, 509.67.rankine)
     }
 
-    private fun assertBidirectionalEquality(left: Quantity, right: Quantity) {
+    @Test
+    internal fun temperatureArithmetic() {
+        // The following should not compile!
+//        10.celsius - 32.fahrenheit
+    }
+
+    private fun assertBidirectionalEquality(left: IntervalQuantity, right: IntervalQuantity) {
         assertEquals(left, right)
         assertEquals(right, left)
     }
