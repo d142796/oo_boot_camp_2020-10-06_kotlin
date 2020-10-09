@@ -77,7 +77,7 @@ class Unit {
         }
 
     internal fun hashCode(amount: Double) =
-        ((amount - offset) * baseUnitRatio / RatioQuantity.DELTA).toLong().hashCode()
+        ((amount - offset) * baseUnitRatio / IntervalQuantity.DELTA).toLong().hashCode()
 
     internal fun isCompatible(other: Unit) = this.baseUnit == other.baseUnit
 }

@@ -9,8 +9,8 @@ package quantity
 import kotlin.math.absoluteValue
 
 // Understands a specific measurement
-open class IntervalQuantity internal constructor(amount: Number, private val unit: Unit) {
-    private val amount = amount.toDouble()
+open class IntervalQuantity internal constructor(amount: Number, protected val unit: Unit) {
+    protected val amount = amount.toDouble()
 
     companion object {
         internal const val DELTA = 0.00000001
@@ -26,5 +26,5 @@ open class IntervalQuantity internal constructor(amount: Number, private val uni
 
     override fun hashCode() = unit.hashCode(amount)
 
-    private fun convertedAmount(other: IntervalQuantity) = this.unit.convertedAmount(other.amount, other.unit)
+    protected fun convertedAmount(other: IntervalQuantity) = this.unit.convertedAmount(other.amount, other.unit)
 }
